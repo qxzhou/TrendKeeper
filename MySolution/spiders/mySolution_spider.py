@@ -31,14 +31,16 @@ class MysolutionSpiderSpider(scrapy.Spider):
 
         item_list = response.xpath("//article[@class='press-release']")
         for i_item in item_list:
+
             mysolution_item = MysolutionItem()
+            #generate the category
             category = i_item.xpath("//strong[contains(text(),'Categories:')]/../a//text()").extract_first()
             i_category = " ".join(category.split())
             mysolution_item["category"] = i_category
 
 
             location = i_item.xpath("//strong[@class='date-line color-pr']//text()").extract_first()
-            #generate the location list
+            #generate the location
             i_location = "".join(location.split())
             i_location = i_location.split(',')
             for i in range(2):
@@ -48,17 +50,19 @@ class MysolutionSpiderSpider(scrapy.Spider):
 
             mysolution_item["keyword"] = i_item.xpath("//strong[contains(text(),'Tags:')]/../a//text()").extract_first()
 
-            #generate the date list
+            #generate the date
             date = i_item.xpath("//span[@class='status-true']//text()").extract_first()
             i_date = " ".join(date.split())
             i_date = i_date.split(' ')
             del i_date[0]
             #Change month from characters to numbers
-            i_date[0] = month[i_date[0]]
-            #formatting date
-            i_date[1] = i_date[1].strip(',')
-            i_date = "-".join(i_date)
+            # i_date[0] = month[i_date[0]]
+            # #formatting date
+            # i_date[1] = i_date[1].strip(',')
+            i_date = " ".join(i_date)
             mysolution_item["date"] = i_date
+
+
 
             # if i_date[:3] == ['8','2', '2018']:
             #     raise CloseSpider('Termination Condition Met')
