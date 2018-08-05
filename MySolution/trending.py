@@ -19,10 +19,11 @@ def raw_data_cleanup(filename):
 
         with open(filename) as json_file:
             print(1)
-            data = [json.loads(line) for line in json_file]
+
+            data = json.load(json_file)
         df = pd.DataFrame(data, columns=['date', 'location', 'category', 'keyword'])
         print("{} is imported into dataframe".format(filename))
-
+        df.to_csv('./output.csv', index=False)
         # Generate city column from location
         city_list = []
         for i in df['location']:
@@ -39,12 +40,11 @@ def raw_data_cleanup(filename):
         city_sort = df['city'].groupby(df['city']).count().sort_values(ascending=False)
 
         # Save DataFrame into csv file
-        city_sort.to_csv('./city_sort.csv', index=False)
-        df.to_csv('./output.csv', index=False)
+        city_sort.to_csv('./city_sort.csv')
 
     else:
         print("{} does not exist in directory. Function was not complete.".format(filename))
 
     return
 
-raw_data_cleanup('rawdata.json')
+raw_data_cleanup('test.json')

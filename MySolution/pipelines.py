@@ -30,6 +30,10 @@ class MysolutionPipeline(object):
         lines = json.dumps(dict(item), ensure_ascii=False) + '\n'
         self.file.write(lines)
         return item
+        # data = []
+        # lines = json.dumps(dict(item), ensure_ascii=False) + ',\n'
+        # self.file.write(data.append(lines))
+        # return item
 
     def close_spider(self, spider):
         self.file.close()
