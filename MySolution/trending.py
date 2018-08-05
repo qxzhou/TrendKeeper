@@ -47,4 +47,4 @@ def raw_data_cleanup(filename):
 
     return
 
-raw_data_cleanup('test.json')
+raw_data_cleanup('rawdata.json')
