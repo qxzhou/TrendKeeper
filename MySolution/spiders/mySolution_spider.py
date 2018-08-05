@@ -8,8 +8,9 @@ import re
 
 # from datetime import timedelta
 # from pytz import timezone
-from MySolution.mysolution import start_date
-from MySolution.mysolution import end_date
+# from MySolution.mysolution import start_date
+# from MySolution.mysolution import end_date
+
 from MySolution.items import MysolutionItem
 
 class MysolutionSpiderSpider(scrapy.Spider):
@@ -75,21 +76,21 @@ class MysolutionSpiderSpider(scrapy.Spider):
             mysolution_item["date"] = i_date
 
 
-
+            if i_date == "Aug 1, 2018":
             # if i_date[:3] == ['8','2', '2018']:
-            #     raise CloseSpider('Termination Condition Met')
+                raise CloseSpider('Termination Condition Met')
 
-            if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', start_date):
-                if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', end_date):
-
-                    if datetime.strptime(i_date, '%b %d, %Y') <= datetime.strptime(end_date(), '%b %d, %Y'):
-                        if datetime.strptime(i_date, '%b %d, %Y') >= datetime.strptime(start_date(), '%b %d, %Y'):
-                           mysolution_item["date"] = i_date
-                        else:
-                            raise CloseSpider('Termination Condition Met')
-
-                    else:
-                        raise CloseSpider('Termination Condition Met')
+            # if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', start_date):
+            #     if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', end_date):
+            #
+            #         if datetime.strptime(i_date, '%b %d, %Y') <= datetime.strptime(end_date(), '%b %d, %Y'):
+            #             if datetime.strptime(i_date, '%b %d, %Y') >= datetime.strptime(start_date(), '%b %d, %Y'):
+            #                mysolution_item["date"] = i_date
+            #             else:
+            #                 raise CloseSpider('Termination Condition Met')
+            #
+            #         else:
+            #             raise CloseSpider('Termination Condition Met')
 
 
 
