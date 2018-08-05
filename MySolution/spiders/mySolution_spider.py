@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
-import scrapy
 from datetime import datetime
+import re
+
+import scrapy
 from scrapy.exceptions import CloseSpider
+import pytz
+
+# from datetime import timedelta
+# from pytz import timezone
+from MySolution.mysolution import start_date
+from MySolution.mysolution import end_date
 from MySolution.items import MysolutionItem
 
-
 class MysolutionSpiderSpider(scrapy.Spider):
-
-    cur_time = datetime.now()
-
     name = 'mySolution_spider'
 
     allowed_domains = ['www.newswire.com']
@@ -26,17 +30,25 @@ class MysolutionSpiderSpider(scrapy.Spider):
 
     def parseSecond(self, response):
 
-        month = {'Jan': '1', 'Feb': '2', 'Mar': '3', 'Apr': '4', 'May': '5', 'Jun': '6',
-                 'Jul': '7', 'Aug': '8', 'Sep': '9', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
+        # month = {'Jan': '1', 'Feb': '2', 'Mar': '3', 'Apr': '4', 'May': '5', 'Jun': '6',
+        #          'Jul': '7', 'Aug': '8', 'Sep': '9', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
+
+        # fmt = "%b %d, %Y %H:%M %Z"
+
+        cur_time = datetime.now()
+        cur_utc = datetime.now(pytz.utc)
 
         item_list = response.xpath("//article[@class='press-release']")
         for i_item in item_list:
-
             mysolution_item = MysolutionItem()
             #generate the category
             category = i_item.xpath("//strong[contains(text(),'Categories:')]/../a//text()").extract_first()
-            i_category = " ".join(category.split())
-            mysolution_item["category"] = i_category
+            #handle corner case when category is empty
+            if category:
+                i_category = " ".join(category.split())
+                mysolution_item["category"] = i_category
+            else:
+                mysolution_item["category"] = ''
 
 
             location = i_item.xpath("//strong[@class='date-line color-pr']//text()").extract_first()
@@ -66,6 +78,46 @@ class MysolutionSpiderSpider(scrapy.Spider):
 
             # if i_date[:3] == ['8','2', '2018']:
             #     raise CloseSpider('Termination Condition Met')
+
+            if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', start_date):
+                if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', end_date):
+
+                    if datetime.strptime(i_date, '%b %d, %Y') <= datetime.strptime(end_date(), '%b %d, %Y'):
+                        if datetime.strptime(i_date, '%b %d, %Y') >= datetime.strptime(start_date(), '%b %d, %Y'):
+                           mysolution_item["date"] = i_date
+                        else:
+                            raise CloseSpider('Termination Condition Met')
+
+                    else:
+                        raise CloseSpider('Termination Condition Met')
+
+
+
+
+            # # get date like 'Aug 3, 2018'
+            #
+            # if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', i_date):
+            #     print(i_date)
+            #     time_diff = cur_time - datetime.strptime(i_date, '%b %d, %Y')
+            #     if time_diff > timedelta(days=7):
+            #         raise CloseSpider('Termination Condition Met')
+            #
+            # # get date like 'Aug 3, 2018 10:00'
+            # elif re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}\s{1}\d{1,2}\W{1}\d{1,2}$', i_date):
+            #     print(i_date)
+            #     time_diff = cur_time - datetime.strptime(i_date, '%b %d, %Y %H:%M')
+            #     if time_diff > timedelta(days=7):
+            #         raise CloseSpider('Termination Condition Met')
+            #
+            # # get date like 'Aug 3, 2018 10:00 PDT'
+            # elif re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}\s{1}\d{1,2}\W{1}\d{1,2}\s{1}\w+$', i_date):
+            #     print(i_date)
+            #
+            #     time = datetime.strptime(i_date, '%b %d, %Y %H:%M %Z')
+            #     eastern_time = time.astimezone(timezone('US/Eastern'))
+            #     time_diff = cur_utc - eastern_time
+            #     if time_diff > timedelta(days=7):
+            #         raise CloseSpider('Termination Condition Met')
 
             yield mysolution_item
 
