@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-import re
 
 import scrapy
 from scrapy.exceptions import CloseSpider
 import pytz
+import re
 
 # from datetime import timedelta
 # from pytz import timezone
