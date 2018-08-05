@@ -11,7 +11,7 @@ import codecs
 
 class MysolutionPipeline(object):
     def __init__(self):
-        self.file = codecs.open('rawdata.json', 'w', encoding='utf-8')
+        self.file = codecs.open('test.json', 'w', encoding='utf-8')
 
     def process_item(self, item, spider):
         """

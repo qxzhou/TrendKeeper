@@ -1,8 +1,7 @@
 import json
 import pandas as pd
 import os.path
-import numpy as np
-import re #regular expression matching
+
 
 
 def raw_data_cleanup(filename):

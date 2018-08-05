@@ -1,5 +1,5 @@
-import re
 from scrapy import cmdline
+from trending import raw_data_cleanup
 
 # start_date = input('please input the starting date(Month dd, yyyy): ')
 # end_date = input('please input the ending date(Month dd, yyyy): ')
@@ -10,7 +10,9 @@ from scrapy import cmdline
 #     if re.match(r'^\w{3}\s{1}\d{1,2}\W{1}\s{1}\d{4}$', end_date):
 #         print(1)
 
-cmdline.execute('scrapy crawl mySolution_spider'.split())
+# cmdline.execute('scrapy crawl mySolution_spider'.split())
+cmdline.execute('scrapy crawl mySolution_spider -o test.json -t json'.split())
+
 
 
 
