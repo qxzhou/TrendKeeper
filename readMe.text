@@ -1,0 +1,9 @@
+1. Python lib is based on Python 3.6
+
+2. scrapy framework is used to crawl the website
+
+3. base lib is packed in build directory
+
+4. Since I have difficulty implementing the assignment only in mysolution.py, I have separated it into two parts, after running mysolution.py, the data is stored in test.json, and then run trending.py, the count number of topLocation is in city_sort.csv, the detail of valid result in sorted in output.csv
+
+5.because of the difficulty in importing the user input result to scrapy, I used Aug 02, 2018 as a sorting example. But the implementation of User input coding part is included in '/spider/mySolution_spider.py' from line 71 to line 114
